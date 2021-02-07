@@ -10,11 +10,31 @@ def create_grid(event=None):
     c.delete('grid_line')
 
     for i in range(0, w, cell_size):
-        width = 2 if i == w/2 else 1
+        is_center = i == w/2
+        if not is_center:
+            c.create_rectangle(
+                (
+                    (i, h/2 - 5),
+                    (i, h/2 + 5)
+                ),
+                width=5
+            )
+            c.create_text((i, h/2 + cell_size), text=str(i - 500))
+        width = 2 if is_center else 1
         c.create_line([(i, 0), (i, h)], tag='grid_line', width=width)
 
     for i in range(0, h, cell_size):
-        width = 2 if i == h/2 else 1
+        is_center = i == h/2
+        if not is_center:
+            c.create_rectangle(
+                (
+                    (w/2 - 5, i),
+                    (w/2 + 5, i)
+                ),
+                width=5
+            )
+            c.create_text((w/2 + cell_size, i), text=str(-i + 500))
+        width = 2 if is_center else 1
         c.create_line([(0, i), (w, i)], tag='grid_line', width=width)
 
 def on_changed(sv: Tk.StringVar):
@@ -31,10 +51,9 @@ def on_changed(sv: Tk.StringVar):
         x_value = i * inverse_scale_x
         y_value = fn(x_value)
         y_position = h - y_value * cell_size
-        if math.floor(i) == 500:
-            print(x_value, y_value)
-            print(i, y_position)
-            print("-" * 10)
+        print(x_value, y_value)
+        print(i, y_position)
+        print("-" * 10)
         c.create_oval([
             (i - 1, y_position - 1),
             (i + 1, y_position + 1)
